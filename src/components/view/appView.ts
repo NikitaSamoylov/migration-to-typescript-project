@@ -1,21 +1,26 @@
 import News from './news/news';
 import Sources from './sources/sources';
+import { TResponse } from '../types/interfaces';
+import { TSources } from '../types/interfaces';
 
 export class AppView {
-    constructor() {
-        this.news = new News();
-        this.sources = new Sources();
-    }
+  news: News;
+  sources: Sources;
 
-    drawNews(data) {
-        const values = data?.articles ? data?.articles : [];
-        this.news.draw(values);
-    }
+  constructor() {
+    this.news = new News();
+    this.sources = new Sources();
+  }
 
-    drawSources(data) {
-        const values = data?.sources ? data?.sources : [];
-        this.sources.draw(values);
-    }
+  drawNews(data: TResponse) {
+    const values = data?.articles ? data?.articles : [];
+    this.news.draw(values);
+  }
+
+  drawSources(data: TSources) {
+    const values = data?.sources ? data?.sources : [];
+    this.sources.draw(values);
+  }
 }
 
 export default AppView;

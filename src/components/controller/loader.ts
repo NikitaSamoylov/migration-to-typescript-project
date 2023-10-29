@@ -1,46 +1,54 @@
+enum FetchMethod {
+  GET = 'get',
+  POST = 'post',
+}
+
+interface IOptions {
+  [key: string]: string;
+}
+
+interface IUrlOptions extends IOptions {
+  apiKey: string;
+}
+
 class Loader {
-    constructor(baseLink, options) {
-        this.baseLink = baseLink;
-        this.options = options;
-    }
+  private baseLink: string;
+  private options: { apiKey: string };
 
-    getResp(
-        { endpoint, options = {} },
-        callback = () => {
-            console.error('No callback for GET response');
-        }
-    ) {
-        this.load('GET', endpoint, callback, options);
-    }
+  constructor(baseLink: string, options: { apiKey: string }) {
+    this.baseLink = baseLink;
+    this.options = options;
+  }
 
-    errorHandler(res) {
-        if (!res.ok) {
-            if (res.status === 401 || res.status === 404)
-                console.log(`Sorry, but there is ${res.status} error: ${res.statusText}`);
-            throw Error(res.statusText);
-        }
+  getResp(
+    { endpoint, options = {} }: { endpoint: string; options?: IOptions },
+    callback = (): void => {
+      console.error('No callback for GET response');
+    },
+  ) {
+    this.load(FetchMethod.GET, endpoint, callback, options);
+  }
 
-        return res;
-    }
+  makeUrl(options: IOptions, endpoint: string) {
+    const urlOptions: IUrlOptions = { ...this.options, ...options };
+    let url: string = `${this.baseLink}${endpoint}?`;
 
-    makeUrl(options, endpoint) {
-        const urlOptions = { ...this.options, ...options };
-        let url = `${this.baseLink}${endpoint}?`;
+    Object.keys(urlOptions).forEach((key) => {
+      url += `${key}=${urlOptions[key]}&`;
+    });
 
-        Object.keys(urlOptions).forEach((key) => {
-            url += `${key}=${urlOptions[key]}&`;
-        });
+    return url.slice(0, -1);
+  }
 
-        return url.slice(0, -1);
-    }
-
-    load(method, endpoint, callback, options = {}) {
-        fetch(this.makeUrl(options, endpoint), { method })
-            .then(this.errorHandler)
-            .then((res) => res.json())
-            .then((data) => callback(data))
-            .catch((err) => console.error(err));
-    }
+  load(method: FetchMethod, endpoint: string, callback: any, options = {}) {
+    fetch(this.makeUrl(options, endpoint), { method })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        callback(data);
+      })
+      .catch((err) => console.error(err));
+  }
 }
 
 export default Loader;

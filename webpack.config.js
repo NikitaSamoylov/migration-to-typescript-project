@@ -18,7 +18,8 @@ module.exports = {
         open: true,
         hot: true,
     },
-    entry: ['@babel/polyfill', path.resolve(__dirname, 'src', 'index.ts')],
+    entry: [path.resolve(__dirname, 'src', 'index.ts')],
+    // entry: './src/index.ts',
     output: {
         path: path.resolve(__dirname, 'dist'),
         clean: true,
@@ -91,24 +92,26 @@ module.exports = {
                 ],
                 type: 'asset/resource'
             },
+            // {
+            //     test: /\.(?:js|mjs|cjs)$/,
+            //     exclude: /node_modules/,
+            //     use: {
+            //         loader: 'babel-loader',
+            //         options: {
+            //         presets: [
+            //             ['@babel/preset-env', { targets: "defaults" }]
+            //         ]
+            //         }
+            //     }
+            // },
             {
-                test: /\.(?:js|mjs|cjs|ts)$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                    presets: [
-                        ['@babel/preset-env', { targets: "defaults" }]
-                    ]
-                    }
-                }
-            },
-            {
-                test: /\.ts$/,
+                test: /\.ts?$/,
                 use: 'ts-loader',
-                include: [path.resolve(__dirname, 'src')],
                 exclude: /node_modules/,
             },
         ]
-    }
+    },
+    resolve: {
+        extensions: ['.ts', '.tsx', '.js']
+    },
 }
