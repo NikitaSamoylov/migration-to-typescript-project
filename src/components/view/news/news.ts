@@ -9,7 +9,6 @@ class News {
     const newsItemTemp = document.querySelector(
       '#newsItemTemp',
     ) as HTMLTemplateElement;
-    console.log(data);
     news.forEach((item, idx) => {
       const newsClone = newsItemTemp.content.cloneNode(
         true,
