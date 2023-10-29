@@ -1,10 +1,17 @@
+export interface ISource {
+  id: string;
+  name: string;
+}
+
 export interface IDataContent {
+  source: ISource;
   author: string;
-  content: string;
-  publishedAt: string;
-  source: { id: string; name: string };
   title: string;
+  description: string;
   url: string;
+  urlToImage: string;
+  publishedAt: string;
+  content: string;
 }
 
 export interface IDataGlobal {
