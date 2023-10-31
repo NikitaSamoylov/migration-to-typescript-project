@@ -1,3 +1,5 @@
+import { ISourcesContent } from '../types/interfaces';
+
 enum FetchMethod {
   GET = 'get',
   POST = 'post',
@@ -40,12 +42,15 @@ class Loader {
     return url.slice(0, -1);
   }
 
-  load(method: FetchMethod, endpoint: string, callback: any, options = {}) {
+  load(
+    method: FetchMethod,
+    endpoint: string,
+    callback: (data: ISourcesContent[]) => void,
+    options: IOptions = {},
+  ) {
     fetch(this.makeUrl(options, endpoint), { method })
       .then((res) => res.json())
-      .then((data) => {
-        callback(data);
-      })
+      .then((data) => callback(data))
       .catch((err) => console.error(err));
   }
 }
